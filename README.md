@@ -44,7 +44,7 @@ Inspects web forms for:
 
 Instead of:
 
-❌ Missing CSP
+> Missing CSP
 
 It will display:
 
