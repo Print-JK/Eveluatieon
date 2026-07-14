@@ -6,30 +6,23 @@ browser.runtime.onMessage.addListener((message) => {
         return;
     }
 
-    const httpsResult = runHTTPSScanner();
-
-    const formResult = runFormScanner();
-
-    const linkResult = runLinkScanner();
+    const results = [];
+    for (const scanner of scanners) {
+    results.push(scanner());}
 
     return Promise.resolve({
 
-        page: {
+    page: {
 
-            title: document.title,
+        title: document.title,
 
-            url: window.location.href
+        url: window.location.href
 
-        },
+    },
 
-        scans: [
+    scans: results
 
-            httpsResult,
-            formResult,
-            linkResult
+});
 
-        ]
-
-    });
 
 });
