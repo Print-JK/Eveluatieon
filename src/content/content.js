@@ -8,6 +8,10 @@ browser.runtime.onMessage.addListener((message) => {
 
     const httpsResult = runHTTPSScanner();
 
+    const formResult = runFormScanner();
+
+    const linkResult = runLinkScanner();
+
     return Promise.resolve({
 
         page: {
@@ -20,7 +24,9 @@ browser.runtime.onMessage.addListener((message) => {
 
         scans: [
 
-            httpsResult
+            httpsResult,
+            formResult,
+            linkResult
 
         ]
 

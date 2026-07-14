@@ -24,6 +24,8 @@
     "matches": ["<all_urls>"],
     "js": [
       "src/checks/httpsScanner.js",
+      "src/checks/formScanner.js",
+      "src/checks/linkScanner.js",
       "src/content/content.js"
     ]
   }
