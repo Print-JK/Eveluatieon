@@ -1,9 +1,16 @@
 body {
-    font-family: Arial, sans-serif;
-    width: 300px;
+    width: 320px;
     padding: 12px;
+    font-family: Arial, sans-serif;
 }
 
-h1 {
-    margin-top: 0;
+button {
+    width: 100%;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#status {
+    margin-top: 15px;
+    white-space: pre-wrap;
 }
