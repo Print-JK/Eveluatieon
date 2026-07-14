@@ -1,5 +1,8 @@
 const scanners = [
     runHTTPSScanner,
     runFormScanner,
-    runLinkScanner
+    runLinkScanner,
+    runScriptScanner,
+    runPhishingScanner,
+    runCookieScanner
 ];

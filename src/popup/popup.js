@@ -6,31 +6,70 @@ scanBtn.addEventListener("click", async () => {
     status.textContent = "Scanning...";
 
     const result = await browser.runtime.sendMessage({
-
         action: "scanPage"
-
     });
 
     let output = "";
 
-    output += `Page\n`;
-    output += `${result.page.title}\n\n`;
+    output += "====================================\n";
+    output += "Eveluatieon Security Report\n";
+    output += "====================================\n\n";
 
+    output += `Page\n`;
+    output += `${result.page.title}\n`;
     output += `${result.page.url}\n\n`;
 
-    result.scans.forEach(scan => {
+    for (const scan of result.scans) {
 
-        output += `==========\n`;
-
+        output += "------------------------------------\n";
         output += `${scan.category}\n`;
+        output += `Score: ${scan.score}/${scan.maxScore}\n\n`;
 
-        output += `Status : ${scan.status}\n`;
+        output += "Observations\n";
 
-        output += `Score  : ${scan.score}/20\n`;
+        if (scan.observations.length === 0) {
 
-        output += `${scan.findings.join("\n")}\n\n`;
+            output += "- None\n";
 
-    });
+        } else {
+
+            scan.observations.forEach(item => {
+                output += `- ${item}\n`;
+            });
+
+        }
+
+        output += "\nRisks\n";
+
+        if (scan.risks.length === 0) {
+
+            output += "- None\n";
+
+        } else {
+
+            scan.risks.forEach(item => {
+                output += `- ${item}\n`;
+            });
+
+        }
+
+        output += "\nRecommendations\n";
+
+        if (scan.recommendations.length === 0) {
+
+            output += "- None\n";
+
+        } else {
+
+            scan.recommendations.forEach(item => {
+                output += `- ${item}\n`;
+            });
+
+        }
+
+        output += "\n";
+
+    }
 
     status.textContent = output;
 

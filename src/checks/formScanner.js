@@ -1,5 +1,10 @@
 function runFormScanner() {
 
+    const result = createScanResult(
+        "forms",
+        "Forms"
+    );
+
     const forms = document.forms;
 
     const passwordFields =
@@ -24,50 +29,62 @@ function runFormScanner() {
     const autocompleteOff =
         document.querySelectorAll("[autocomplete='off']").length;
 
-    let findings = [];
+    result.details = {
 
-    if (passwordFields > 0)
-        findings.push(`${passwordFields} password field(s) found.`);
+        forms: forms.length,
 
-    if (emailFields > 0)
-        findings.push(`${emailFields} email field(s) found.`);
+        passwordFields,
 
-    if (insecureLoginForms > 0)
-        findings.push(`${insecureLoginForms} insecure HTTP form(s).`);
+        emailFields,
 
-    if (autocompleteOff > 0)
-        findings.push(`${autocompleteOff} field(s) disable autocomplete.`);
+        insecureLoginForms,
 
-    return {
-
-        category: "Forms",
-
-        status:
-            insecureLoginForms > 0
-                ? "WARNING"
-                : "PASS",
-
-        score:
-            insecureLoginForms > 0
-                ? 10
-                : 20,
-
-        findings,
-
-        details: {
-
-            forms: forms.length,
-
-            passwordFields,
-
-            emailFields,
-
-            insecureLoginForms,
-
-            autocompleteOff
-
-        }
+        autocompleteOff
 
     };
+
+    result.observations.push(
+        `${forms.length} form(s) detected.`
+    );
+
+    if (passwordFields > 0) {
+
+        result.observations.push(
+            `${passwordFields} password field(s) detected.`
+        );
+
+    }
+
+    if (emailFields > 0) {
+
+        result.observations.push(
+            `${emailFields} email field(s) detected.`
+        );
+
+    }
+
+    if (autocompleteOff > 0) {
+
+        result.observations.push(
+            `${autocompleteOff} field(s) disable autocomplete.`
+        );
+
+    }
+
+    if (insecureLoginForms > 0) {
+
+        result.score -= 10;
+
+        result.risks.push(
+            "Credentials submitted over HTTP can be intercepted."
+        );
+
+        result.recommendations.push(
+            "Submit authentication forms over HTTPS."
+        );
+
+    }
+
+    return result;
 
 }

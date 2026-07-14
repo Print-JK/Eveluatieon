@@ -1,5 +1,10 @@
 function runLinkScanner() {
 
+    const result = createScanResult(
+        "links",
+        "Links"
+    );
+
     const links = document.links;
 
     let totalLinks = links.length;
@@ -43,53 +48,49 @@ function runLinkScanner() {
 
     }
 
-    const findings = [];
+    result.details = {
 
-    if (externalLinks > 0)
-        findings.push(`${externalLinks} external link(s).`);
-
-    if (insecureLinks > 0)
-        findings.push(`${insecureLinks} insecure HTTP link(s).`);
-
-    if (javascriptLinks > 0)
-        findings.push(`${javascriptLinks} javascript: link(s).`);
-
-    if (emptyLinks > 0)
-        findings.push(`${emptyLinks} placeholder link(s).`);
-
-    let score = 20;
-
-    if (insecureLinks > 0)
-        score -= 8;
-
-    if (javascriptLinks > 0)
-        score -= 6;
-
-    if (score < 0)
-        score = 0;
-
-    return {
-
-        category: "Links",
-
-        status: score >= 18 ? "PASS" :
-                score >= 10 ? "WARNING" :
-                "FAIL",
-
-        score,
-
-        findings,
-
-        details: {
-
-            totalLinks,
-            externalLinks,
-            insecureLinks,
-            javascriptLinks,
-            emptyLinks
-
-        }
+        totalLinks,
+        externalLinks,
+        insecureLinks,
+        javascriptLinks,
+        emptyLinks
 
     };
+
+    result.observations.push(
+        `${totalLinks} hyperlink(s) detected.`
+    );
+
+    if (externalLinks > 0)
+        result.observations.push(
+            `${externalLinks} external link(s).`
+        );
+
+    if (javascriptLinks > 0)
+        result.observations.push(
+            `${javascriptLinks} javascript: link(s).`
+        );
+
+    if (emptyLinks > 0)
+        result.observations.push(
+            `${emptyLinks} placeholder (#) link(s).`
+        );
+
+    if (insecureLinks > 0) {
+
+        result.score -= 5;
+
+        result.risks.push(
+            "Some links point to HTTP resources."
+        );
+
+        result.recommendations.push(
+            "Prefer HTTPS links whenever available."
+        );
+
+    }
+
+    return result;
 
 }
