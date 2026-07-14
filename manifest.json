@@ -20,11 +20,14 @@
   },
 
   "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["src/content/content.js"]
-    }
-  ],
+  {
+    "matches": ["<all_urls>"],
+    "js": [
+      "src/checks/httpsScanner.js",
+      "src/content/content.js"
+    ]
+  }
+],
 
   "action": {
     "default_popup": "src/popup/popup.html"

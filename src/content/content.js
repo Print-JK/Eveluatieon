@@ -1,4 +1,4 @@
-console.log("Content script loaded:", window.location.href);
+console.log("Content coordinator loaded.");
 
 browser.runtime.onMessage.addListener((message) => {
 
@@ -6,13 +6,23 @@ browser.runtime.onMessage.addListener((message) => {
         return;
     }
 
+    const httpsResult = runHTTPSScanner();
+
     return Promise.resolve({
 
-        title: document.title,
+        page: {
 
-        url: window.location.href,
+            title: document.title,
 
-        formCount: document.forms.length
+            url: window.location.href
+
+        },
+
+        scans: [
+
+            httpsResult
+
+        ]
 
     });
 

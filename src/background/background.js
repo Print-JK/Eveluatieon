@@ -1,4 +1,4 @@
-console.log("Background started");
+console.log("Background started.");
 
 browser.runtime.onMessage.addListener(async (message) => {
 
@@ -6,20 +6,23 @@ browser.runtime.onMessage.addListener(async (message) => {
         return;
     }
 
-    const tabs = await browser.tabs.query({
+    const [activeTab] = await browser.tabs.query({
+
         active: true,
         currentWindow: true
+
     });
 
-    const activeTab = tabs[0];
+    return await browser.tabs.sendMessage(
 
-    const pageInfo = await browser.tabs.sendMessage(
         activeTab.id,
-        {
-            action: "collectPageInfo"
-        }
-    );
 
-    return pageInfo;
+        {
+
+            action: "collectPageInfo"
+
+        }
+
+    );
 
 });
