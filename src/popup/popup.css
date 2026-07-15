@@ -1,16 +1,214 @@
-body {
-    width: 320px;
-    padding: 12px;
-    font-family: Arial, sans-serif;
+/* Color Palette & Base */
+:root {
+    --bg-dark: #1c1e24;
+    --bg-header: #16171c;
+    --border-color: #2a2d37;
+    --text-primary: #ccd6db;
+    --text-muted: #8c969c;
+    --accent-blue: #388bfd;
+    --accent-blue-hover: #58a6ff;
+    --accordion-header-bg: #22252e;
+    --accordion-content-bg: #191b20;
 }
 
-button {
-    width: 100%;
-    padding: 10px;
+body {
+    width: 320px;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    box-sizing: border-box;
+}
+
+/* Header & Power Button */
+.header-container {
+    background-color: var(--bg-header);
+    padding: 16px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.domain-header {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.power-button-wrapper {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    width: auto;
+}
+
+.power-icon {
+    width: 72px;
+    height: 72px;
+    fill: var(--accent-blue);
+    filter: drop-shadow(0 0 4px rgba(56, 139, 253, 0.2));
+    transition: transform 0.1s ease, fill 0.2s ease, filter 0.2s;
+}
+
+.power-button-wrapper:hover .power-icon {
+    fill: var(--accent-blue-hover);
+    filter: drop-shadow(0 0 8px rgba(56, 139, 253, 0.5));
+}
+
+.power-button-wrapper:active .power-icon {
+    transform: scale(0.95);
+}
+
+.power-subtitle {
+    margin-top: 14px;
+    font-size: 14px;
+    color: var(--text-primary);
+    transition: color 0.2s;
+}
+
+.power-button-wrapper:hover .power-subtitle {
+    color: #fff;
+}
+
+/* Status Area */
+#status {
+    padding: 12px;
+    min-height: 180px;
+    max-height: 350px;
+    overflow-y: auto;
+    font-size: 13px;
+}
+
+.placeholder-text {
+    text-align: center;
+    color: var(--text-muted);
+    margin-top: 40px;
+    font-style: italic;
+}
+
+/* Accordion Styling */
+.accordion-item {
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+.accordion-header {
+    background-color: var(--accordion-header-bg);
+    padding: 10px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.accordion-header:hover {
+    background-color: #2b2e3a;
+}
+
+.score-badge {
+    font-size: 11px;
+    background-color: rgba(56, 139, 253, 0.15);
+    color: var(--accent-blue-hover);
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-right: auto;
+    margin-left: 10px;
+}
+
+.arrow-icon {
+    font-size: 10px;
+    color: var(--text-muted);
+    transition: transform 0.2s;
+}
+
+/* Accordion content behavior */
+.accordion-content {
+    background-color: var(--accordion-content-bg);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+.accordion-item.active .accordion-content {
+    max-height: 500px; /* Adjust dynamically */
+    border-top: 1px solid var(--border-color);
+}
+
+.accordion-item.active .arrow-icon {
+    transform: rotate(180deg);
+}
+
+/* Inner Accordion Metadata Lists */
+.scan-details-section {
+    padding: 10px 14px;
+}
+
+.scan-details-section h4 {
+    margin: 8px 0 4px 0;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.scan-details-section ul {
+    margin: 0 0 10px 0;
+    padding-left: 16px;
+}
+
+.scan-details-section li {
+    margin-bottom: 4px;
+    color: #e2e8f0;
+}
+
+/* Footer Section 
+.footer {
+    background-color: var(--bg-header);
+    border-top: 1px solid var(--border-color);
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.footer-icons {
+    display: flex;
+    gap: 14px;
+}
+
+.footer-icons .icon {
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s, transform 0.1s;
+}
+
+.footer-icons .icon:hover {
+    opacity: 1;
+    color: #fff;
+}
+
+.footer-toggle {
+    display: flex;
+    gap: 10px;
     cursor: pointer;
 }
 
-#status {
-    margin-top: 15px;
-    white-space: pre-wrap;
+.footer-toggle span:hover {
+    color: #fff;
 }
+*/

@@ -1,26 +1,42 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="popup.css">
 </head>
-
 <body>
 
-    <h1>Eveluatieon</h1>
-
-    <button id="scanBtn">
-        Scan Current Page
-    </button>
-
-    <hr>
-
-    <div id="status">
-        Waiting for scan...
+    <div class="header-container">
+        <div class="domain-header" id="pageDomain">Eveluatieon</div>
+        
+        <button id="scanBtn" class="power-button-wrapper" title="Click to Scan Page">
+            <svg class="power-icon" viewBox="0 0 24 24">
+                <path d="M12,2A10,10,0,0,0,2,12a9.89,9.89,0,0,0,4.07,8l1.3-1.52A8,8,0,1,1,12,20a7.92,7.92,0,0,1-5.26-2l-1.3,1.52A10,10,0,1,0,12,2Z"/>
+                <rect x="11" y="2" width="2" height="10" rx="1"/>
+            </svg>
+            <div id="scanSubtitle" class="power-subtitle">Scan Current Page</div>
+        </button>
     </div>
 
+    <div id="status">
+        <div class="placeholder-text">Ready to Scan.</div>
+    </div>
+
+<!---                  footer
+    <div class="footer">
+        <div class="footer-icons">
+            <span class="icon" title="Picker">🧪</span>
+            <span class="icon" title="Report">💬</span>
+            <span class="icon" title="Logger">📋</span>
+            <span class="icon" title="Settings">⚙️</span>
+        </div>
+        <div class="footer-toggle">
+            <span>More ▾</span>
+            <span>Less ▴</span>
+        </div>
+    </div>
+--->
     <script src="popup.js"></script>
-
 </body>
-
 </html>

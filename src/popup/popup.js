@@ -1,76 +1,104 @@
 const scanBtn = document.getElementById("scanBtn");
-const status = document.getElementById("status");
+const scanSubtitle = document.getElementById("scanSubtitle");
+const statusDiv = document.getElementById("status");
+const pageDomainEl = document.getElementById("pageDomain");
 
 scanBtn.addEventListener("click", async () => {
 
-    status.textContent = "Scanning...";
+    scanSubtitle.textContent = "Scanning...";
+    scanBtn.disabled = true; // Temporary disable to prevent double clicking
+    statusDiv.innerHTML = `<div class="placeholder-text">Analyzing resources...</div>`;
 
-    const result = await browser.runtime.sendMessage({
-        action: "scanPage"
-    });
+    try {
 
-    let output = "";
+        const result = await browser.runtime.sendMessage({
+            action: "scanPage"
+        });
 
-    output += "====================================\n";
-    output += "Eveluatieon Security Report\n";
-    output += "====================================\n\n";
 
-    output += `Page\n`;
-    output += `${result.page.title}\n`;
-    output += `${result.page.url}\n\n`;
-
-    for (const scan of result.scans) {
-
-        output += "------------------------------------\n";
-        output += `${scan.category}\n`;
-        output += `Score: ${scan.score}/${scan.maxScore}\n\n`;
-
-        output += "Observations\n";
-
-        if (scan.observations.length === 0) {
-
-            output += "- None\n";
-
-        } else {
-
-            scan.observations.forEach(item => {
-                output += `- ${item}\n`;
-            });
-
+        if (result.page && result.page.url) {
+            try {
+                const urlObj = new URL(result.page.url);
+                pageDomainEl.textContent = urlObj.hostname;
+            } catch (e) {
+                pageDomainEl.textContent = result.page.title || "Target Site";
+            }
         }
 
-        output += "\nRisks\n";
 
-        if (scan.risks.length === 0) {
+        statusDiv.innerHTML = "";
 
-            output += "- None\n";
 
-        } else {
+        result.scans.forEach((scan) => {
+            const accordionItem = document.createElement("div");
+            accordionItem.className = "accordion-item";
 
-            scan.risks.forEach(item => {
-                output += `- ${item}\n`;
+
+            const header = document.createElement("div");
+            header.className = "accordion-header";
+            header.innerHTML = `
+                <span class="category-title">${scan.category}</span>
+                <span class="score-badge">${scan.score}/${scan.maxScore}</span>
+                <span class="arrow-icon">▼</span>
+            `;
+
+
+            const content = document.createElement("div");
+            content.className = "accordion-content";
+
+
+            const detailsSection = document.createElement("div");
+            detailsSection.className = "scan-details-section";
+
+
+            const buildListHtml = (title, items) => {
+                let html = `<h4>${title}</h4><ul>`;
+                if (!items || items.length === 0) {
+                    html += `<li>None</li>`;
+                } else {
+                    items.forEach(item => {
+                        html += `<li>${escapeHtml(item)}</li>`;
+                    });
+                }
+                html += `</ul>`;
+                return html;
+            };
+
+
+            detailsSection.innerHTML += buildListHtml("Observations", scan.observations);
+            detailsSection.innerHTML += buildListHtml("Risks", scan.risks);
+            detailsSection.innerHTML += buildListHtml("Recommendations", scan.recommendations);
+
+            content.appendChild(detailsSection);
+            accordionItem.appendChild(header);
+            accordionItem.appendChild(content);
+            statusDiv.appendChild(accordionItem);
+
+
+            header.addEventListener("click", () => {
+                const isActive = accordionItem.classList.contains("active");
+                
+
+                document.querySelectorAll(".accordion-item").forEach(item => {
+                    item.classList.remove("active");
+                });
+
+                if (!isActive) {
+                    accordionItem.classList.add("active");
+                }
             });
+        });
 
-        }
-
-        output += "\nRecommendations\n";
-
-        if (scan.recommendations.length === 0) {
-
-            output += "- None\n";
-
-        } else {
-
-            scan.recommendations.forEach(item => {
-                output += `- ${item}\n`;
-            });
-
-        }
-
-        output += "\n";
-
+    } catch (error) {
+        statusDiv.innerHTML = `<div class="placeholder-text" style="color:#ff6b6b;">Error scanning page. Make sure the background script is running.</div>`;
+    } finally {
+        scanSubtitle.textContent = "Scan Current Page";
+        scanBtn.disabled = false;
     }
-
-    status.textContent = output;
-
 });
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
