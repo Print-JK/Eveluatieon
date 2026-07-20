@@ -48,7 +48,15 @@
         "128": "src/icons/icon128.png"
     },
     "default_popup": "src/popup/popup.html"
+  },
+"browser_specific_settings": {
+  "gecko": {
+    "id": "eveluatieon@yourname.dev",
+    "data_collection_permissions": {
+      "required": [
+        "none"
+      ]
+    }
   }
 }
-
-    
+}
