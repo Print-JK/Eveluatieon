@@ -7,8 +7,14 @@ scanBtn.addEventListener("click", async () => {
 
     scanSubtitle.textContent = "Scanning...";
     scanBtn.disabled = true; // Temporary disable to prevent double clicking
-    statusDiv.innerHTML = `<div class="placeholder-text">Analyzing resources...</div>`;
+    statusDiv.replaceChildren();
 
+    const loading = document.createElement("div");
+    loading.className = "placeholder-text";
+    loading.textContent = "Analyzing resources...";
+
+    statusDiv.appendChild(loading);
+    
     try {
 
         const result = await browser.runtime.sendMessage({
@@ -36,11 +42,22 @@ scanBtn.addEventListener("click", async () => {
 
             const header = document.createElement("div");
             header.className = "accordion-header";
-            header.innerHTML = `
-                <span class="category-title">${scan.category}</span>
-                <span class="score-badge">${scan.score}/${scan.maxScore}</span>
-                <span class="arrow-icon">▼</span>
-            `;
+
+            const title = document.createElement("span");
+            title.className = "category-title";
+            title.textContent = scan.category;
+
+            const badge = document.createElement("span");
+            badge.className = "score-badge";
+            badge.textContent = `${scan.score}/${scan.maxScore}`;
+
+            const arrow = document.createElement("span");
+            arrow.className = "arrow-icon";
+            arrow.textContent = "▼";
+
+            header.appendChild(title);
+            header.appendChild(badge);
+            header.appendChild(arrow);
 
 
             const content = document.createElement("div");
@@ -51,23 +68,53 @@ scanBtn.addEventListener("click", async () => {
             detailsSection.className = "scan-details-section";
 
 
-            const buildListHtml = (title, items) => {
-                let html = `<h4>${title}</h4><ul>`;
-                if (!items || items.length === 0) {
-                    html += `<li>None</li>`;
-                } else {
-                    items.forEach(item => {
-                        html += `<li>${escapeHtml(item)}</li>`;
-                    });
-                }
-                html += `</ul>`;
-                return html;
-            };
+        function buildList(title, items) {
+
+            const section = document.createElement("div");
+
+            const heading = document.createElement("h4");
+            heading.textContent = title;
+
+            section.appendChild(heading);
+
+            const list = document.createElement("ul");
+
+            if (!items || items.length === 0) {
+
+                const li = document.createElement("li");
+                li.textContent = "None";
+                list.appendChild(li);
+
+            } else {
+
+                items.forEach(item => {
+
+                    const li = document.createElement("li");
+                    li.textContent = item;
+                    list.appendChild(li);
+
+                });
+
+            }
+
+            section.appendChild(list);
+
+            return section;
+
+        }
 
 
-            detailsSection.innerHTML += buildListHtml("Observations", scan.observations);
-            detailsSection.innerHTML += buildListHtml("Risks", scan.risks);
-            detailsSection.innerHTML += buildListHtml("Recommendations", scan.recommendations);
+            detailsSection.appendChild(
+                buildList("Observations", scan.observations)
+            );
+
+            detailsSection.appendChild(
+                buildList("Risks", scan.risks)
+            );
+
+            detailsSection.appendChild(
+                buildList("Recommendations", scan.recommendations)
+            );
 
             content.appendChild(detailsSection);
             accordionItem.appendChild(header);
@@ -90,15 +137,20 @@ scanBtn.addEventListener("click", async () => {
         });
 
     } catch (error) {
-        statusDiv.innerHTML = `<div class="placeholder-text" style="color:#ff6b6b;">Error scanning page. Make sure the background script is running.</div>`;
+    
+    statusDiv.replaceChildren();
+
+    const errorMsg = document.createElement("div");
+    errorMsg.className = "placeholder-text";
+    errorMsg.style.color = "#ff6b6b";
+    errorMsg.textContent =
+    "Error scanning page. Make sure the background script is running.";
+
+statusDiv.appendChild(errorMsg);    
+
+
     } finally {
         scanSubtitle.textContent = "Scan Current Page";
         scanBtn.disabled = false;
     }
 });
-
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
